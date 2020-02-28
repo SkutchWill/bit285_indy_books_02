@@ -6,6 +6,7 @@ using IndyBooks.Models;
 using IndyBooks.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace IndyBooks.Controllers
 {
@@ -38,18 +39,21 @@ namespace IndyBooks.Controllers
             if (search.AuthorLastName != null)
             {
                 //TODO:Create lamda expression to filter collection using the Name property of the Book's Author entity
-                foundBooks = foundBooks
-                             .Include(b => b.Author);
+                foundBooks = foundBooks                             
+                             .Where(b => b.Author.Name.Contains(search.AuthorLastName));
                              
                              
             }
             //Priced Between Search (min and max price entered)
             if (search.MinPrice > 0 && search.MaxPrice > 0)
             {
-                foundBooks = foundBooks 
-                            .Where(b => b.Price >= search.MinPrice && b.Price <= search.MaxPrice)
+                foundBooks = foundBooks
+                             .Where(b => b.Price >= search.MinPrice && b.Price <= search.MaxPrice)                                                         
                              .OrderByDescending(b => b.Price);
+                //foundBooks = foundBooks.Distinct();
             }
+            
+
             //Composite Search Results
             return View("SearchResults", foundBooks);
         }
