@@ -12,6 +12,7 @@ namespace IndyBooks.ViewModels
         public String AuthorLastName { get; set; }
         public decimal MinPrice { get; set; }
         public decimal MaxPrice { get; set; }
+        public bool HighPrice { get; set; }
 
     }
 }

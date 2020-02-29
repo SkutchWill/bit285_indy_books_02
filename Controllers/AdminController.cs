@@ -48,11 +48,17 @@ namespace IndyBooks.Controllers
             if (search.MinPrice > 0 && search.MaxPrice > 0)
             {
                 foundBooks = foundBooks
-                             .Where(b => b.Price >= search.MinPrice && b.Price <= search.MaxPrice)                                                         
-                             .OrderByDescending(b => b.Price);
-                //foundBooks = foundBooks.Distinct();
+                             .Where(b => b.Price >= search.MinPrice && b.Price <= search.MaxPrice)
+                             //.GroupBy(b => b.Author.Name)
+                             //.Select(b => b.First())
+                             //I could not get the Distinct function to work so I tried this as a work around but it is giving me errors as well.
+                             .OrderByDescending(b => b.Price);                
             }
-            
+            if (search.HighPrice)
+            {
+                foundBooks = foundBooks.First(IGrouping(Price, foundBooks));
+                
+            }
 
             //Composite Search Results
             return View("SearchResults", foundBooks);
